@@ -49,20 +49,24 @@ const formatTimestamp = timeStr => {
   return timeStr;
 };
 
-//method to sort messages list either ascending or descending
-const sortByTime = (mList, ascending) => {
-  //dates are in ISO string, so can be sorted lexicographically
-  if (ascending) {
-    mList.sort((a, b) => {
-      return a.sentAt < b.sentAt ? -1 : a.sentAt > b.sentAt ? 1 : 0;
-    });
-  } else {
-    mList.sort((a, b) => {
-      return a.sentAt > b.sentAt ? -1 : a.sentAt < b.sentAt ? 1 : 0;
-    });
+//method to sort messages by ascending or descending ISO times
+//dates are in ISO string, and can be sorted lexicographically
+const sortByTime = (mList, order) => {
+  switch(order) {
+    case 'asc':
+      mList.sort((a, b) => {
+        return a.sentAt < b.sentAt ? -1 : a.sentAt > b.sentAt ? 1 : 0;
+      });
+      break;
+    case 'desc':
+      mList.sort((a, b) => {
+        return a.sentAt > b.sentAt ? -1 : a.sentAt < b.sentAt ? 1 : 0;
+      });
   }
+
   return mList;
-};
+}
+
 
 module.exports = {
   formatTimestamp: formatTimestamp,
