@@ -3,8 +3,10 @@ import { render } from "react-dom";
 import {sortByTime} from "../util/TimeUtil"
 
 import { messages } from "../data.json";
+
 import MessageTile from "./MessageTile";
 import SortBtn from "./SortBtn";
+import PageSelector from "./PageSelector";
 
 class MessageList extends Component {
   constructor(props) {
@@ -21,11 +23,20 @@ class MessageList extends Component {
     this.handleSortChange = this.handleSortChange.bind(this);
   }
 
-  //simulated loading time for a fetch
+  //an API call to get message data would happen here. Simulated waiting for a call with a timeout.
   componentDidMount() {
-    //time out to represent loading if time to do it
-    setTimeout(() => this.getMessages(), 0);
+    setTimeout(() => this.getMessages(), 1500);
   }
+
+  //method to deduplicate messages with same uuid and content
+  removeDuplicates(data) {
+    return data.filter(
+      (message, idx, mList) =>
+        mList.findIndex(
+          msg => msg.content === message.content && msg.uuid === message.uuid
+        ) === idx
+    );
+  }  
 
   //message to recieve a de-duped list of messages and assign it to state
   getMessages() {
@@ -33,19 +44,19 @@ class MessageList extends Component {
     this.setState({ loading: false, messages: mList });
   }
 
-  //method to delete message
-  //this removes it from list in state, would need to be an api call in an application 
+  //method to delete message (would need to call backend in case of APIs)
   deleteMessage(message) {
     this.setState(state => ({
       messages: state.messages.filter(msg => msg !== message)
     }));
   }
 
-  handlePageChange(event) {
-    console.log(event.target.value);
-    //this.setState()
+  //method to change the displayed page
+  handlePageChange(targetPage) {
+    this.setState({pageIdx: targetPage-1});
   }
 
+  //method to change displayed sort order
   handleSortChange(){
     this.setState(state => {
       let nextDirection = ""
@@ -64,17 +75,7 @@ class MessageList extends Component {
     });
   }
 
-  //method to deduplicate messages with same uuid and content
-  removeDuplicates(data) {
-    return data.filter(
-      (message, idx, mList) =>
-        mList.findIndex(
-          msg => msg.content === message.content && msg.uuid === message.uuid
-        ) === idx
-    );
-  }  
-
-  //method to generate li tags for each message
+  //method to generate tile component for each message
   generateListItems(data) {
     return data.map(msg => (
       <MessageTile key={msg.uuid + msg.sentAt}  msg={msg} handleDelete={this.deleteMessage}/>
@@ -82,25 +83,33 @@ class MessageList extends Component {
   }
 
   render() {
-    //li's generated from copy of message list sorted in current sort order
+    //max page number for pagination
+    const lastPage = Math.ceil(this.state.messages.length/5);
+
+    //sort and slice a copy of messages in state appropriate for page
     let msgList = sortByTime([...this.state.messages], this.state.sortDirection)
     msgList = msgList.slice(this.state.pageIdx * 5, (this.state.pageIdx * 5) + 5);
 
+    //generate message tiles
     const messageList = this.generateListItems(msgList);
+    const loading = this.state.loading;
 
-    //TODO: do the loading bit
-    //TODO: styling
-    //TODO: pagination
+    //TODO: styling - loader, buttons, general display
     return (
-      <div className="MessageList">
-        <h1>Messages</h1>
-        <SortBtn sortOrd={this.state.sortDirection} handleSort={this.handleSortChange}/>
-        <ul>
-          {messageList}
-        </ul>
-        <button onClick={this.handlePageChange}>pageNav</button>
+      <div className='list-container'>
+      {loading && <div className='spinner'>Loading...</div>}
+      {!loading &&
+        <div className="MessageList">
+          <h1>Messages</h1>
+          <SortBtn sortOrd={this.state.sortDirection} handleSort={this.handleSortChange}/>
+          <PageSelector pageChange={this.handlePageChange} cur={this.state.pageIdx + 1} last={lastPage}/>
+          <ul className="message-tiles">
+            {messageList}
+          </ul>
+        </div>
+      }
       </div>
-      );
+    );
   }
 }
 

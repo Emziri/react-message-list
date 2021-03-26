@@ -1,8 +1,5 @@
 import React, { Component } from "react";
-import { render } from "react-dom";
-import {formatTimestamp} from "../util/TimeUtil"
-
-import { messages } from "../data.json";
+import {formatTimestamp} from "../util/TimeUtil";
 
 class MessageTile extends Component {
   render() {
@@ -11,7 +8,7 @@ class MessageTile extends Component {
         <h1>Sender {this.props.msg.senderUuid}</h1>
         <strong>{formatTimestamp(this.props.msg.sentAt)}</strong>
         <p>{this.props.msg.content}</p>
-        <button onClick={() => this.props.handleDelete(this.props.msg)}> Delete </button>
+        <button onClick={() => this.props.handleDelete(this.props.msg)}>Delete</button>
       </li>
     );
   }
