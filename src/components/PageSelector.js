@@ -9,7 +9,7 @@ class PageSelector extends Component {
     //TODO add dynamic classname for highlighted page
     const pages = pList.map((page) => 
       <li key={page}>
-        <button className="page-btn" onClick={() => this.props.pageChange(page)}>
+        <button className={"page-btn " + (page === this.props.cur ? 'currently' : '')} onClick={() => this.props.pageChange(page)}>
           {page}
         </button>
       </li>);
@@ -21,7 +21,7 @@ class PageSelector extends Component {
     const cur = this.props.cur;
 
     return (
-      <ul className="page-options">
+      <ul className="page-nums">
         {cur > 1 &&
         <li>
           <button className="page-btn" onClick={() => this.props.pageChange(cur - 1)}>

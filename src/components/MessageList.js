@@ -97,12 +97,18 @@ class MessageList extends Component {
     //TODO: styling - loader, buttons, general display
     return (
       <div className='list-container'>
-      {loading && <div className='spinner'>Loading...</div>}
+      {loading && 
+        <div className="spinner-container">
+          <div className="spinner"></div>
+        </div>
+      }
       {!loading &&
         <div className="MessageList">
           <h1>Messages</h1>
-          <SortBtn sortOrd={this.state.sortDirection} handleSort={this.handleSortChange}/>
-          <PageSelector pageChange={this.handlePageChange} cur={this.state.pageIdx + 1} last={lastPage}/>
+          <div className="list-btns">
+            <SortBtn sortOrd={this.state.sortDirection} handleSort={this.handleSortChange}/>
+            <PageSelector pageChange={this.handlePageChange} cur={this.state.pageIdx + 1} last={lastPage}/>
+          </div>
           <ul className="message-tiles">
             {messageList}
           </ul>
