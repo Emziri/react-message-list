@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 
 class SortBtn extends Component {
+
+  //method to determine appropriate button label
   getDisplayStr() {
     let btnDisplay = ""
     switch(this.props.sortOrd) {

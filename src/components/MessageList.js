@@ -23,7 +23,7 @@ class MessageList extends Component {
     this.handleSortChange = this.handleSortChange.bind(this);
   }
 
-  //an API call to get message data would happen here. Simulated waiting for a call with a timeout.
+  //an API call to get message data would happen here. Simulated waiting for a call with a timeout for cool spinner (just for fun)
   componentDidMount() {
     setTimeout(() => this.getMessages(), 1500);
   }
@@ -92,17 +92,17 @@ class MessageList extends Component {
 
     //generate message tiles
     const messageList = this.generateListItems(msgList);
-    const loading = this.state.loading;
 
-    //TODO: styling - loader, buttons, general display
     return (
       <div className='list-container'>
-      {loading && 
+
+      {this.state.loading && 
         <div className="spinner-container">
           <div className="spinner"></div>
         </div>
       }
-      {!loading &&
+
+      {!this.state.loading &&
         <div className="MessageList">
           <h1>Messages</h1>
           <div className="list-btns">
@@ -114,6 +114,7 @@ class MessageList extends Component {
           </ul>
         </div>
       }
+      
       </div>
     );
   }

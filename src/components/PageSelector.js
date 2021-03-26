@@ -1,18 +1,21 @@
 import React, { Component } from "react";
 
 class PageSelector extends Component {
+  //method to dynamically generate page number buttons
   generatePageBtns() {
     const pList = [];
+
     for(let i = 1; i <= this.props.last; i++){
       pList.push(i);
     }
-    //TODO add dynamic classname for highlighted page
+
     const pages = pList.map((page) => 
       <li key={page}>
         <button className={"page-btn " + (page === this.props.cur ? 'currently' : '')} onClick={() => this.props.pageChange(page)}>
           {page}
         </button>
       </li>);
+
     return pages;
   }
   
@@ -22,19 +25,25 @@ class PageSelector extends Component {
 
     return (
       <ul className="page-nums">
+
         {cur > 1 &&
         <li>
           <button className="page-btn" onClick={() => this.props.pageChange(cur - 1)}>
            &lt;
           </button>
-        </li>}
+        </li>
+        }
+
         {pageList}
+
         {cur < this.props.last &&
         <li>
           <button className="page-btn" onClick={() => this.props.pageChange(cur + 1)}>
             &gt;
           </button>
-        </li>}
+        </li>
+        }
+        
       </ul>
     );
   }

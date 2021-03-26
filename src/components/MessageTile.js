@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import {formatTimestamp} from "../util/TimeUtil";
 
+//component for a singular message tile
 class MessageTile extends Component {
   render() {
     return (
